@@ -2,7 +2,6 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-
 class ProjectCreate(BaseModel):
     title: str
     problem: str
@@ -10,7 +9,6 @@ class ProjectCreate(BaseModel):
     contribution: str
     type: str
     tools_used: str
-
 
 class ProjectUpdate(BaseModel):
     title: Optional[str] = None

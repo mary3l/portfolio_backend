@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 
-from app.auth import require_api_key
+from app.auth import require_admin
 from app.schemas.project import ProjectCreate, ProjectUpdate
 from app.services import project_service
 
@@ -20,12 +20,12 @@ def get_project(project_id: int):
     return project
 
 
-@router.post("/", status_code=201, dependencies=[Depends(require_api_key)])
+@router.post("/", status_code=201, dependencies=[Depends(require_admin)])
 def create_project(project: ProjectCreate):
     return project_service.create_project(project)
 
 
-@router.patch("/{project_id}", dependencies=[Depends(require_api_key)])
+@router.patch("/{project_id}", dependencies=[Depends(require_admin)])
 def update_project(project_id: int, project: ProjectUpdate):
     updated = project_service.update_project(project_id, project)
     if updated is None:
@@ -33,7 +33,7 @@ def update_project(project_id: int, project: ProjectUpdate):
     return updated
 
 
-@router.delete("/{project_id}", dependencies=[Depends(require_api_key)])
+@router.delete("/{project_id}", dependencies=[Depends(require_admin)])
 def delete_project(project_id: int):
     deleted = project_service.delete_project(project_id)
     if not deleted:
