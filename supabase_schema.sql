@@ -8,6 +8,8 @@ create table if not exists public.projects (
   contribution text not null,
   type text not null,
   tools_used text not null,
+  -- Absolute http(s) URL to the cover image; NULL falls back to a generated tile.
+  image_url text,
   created_at timestamptz not null default now()
 );
 

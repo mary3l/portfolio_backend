@@ -1,0 +1,25 @@
+[project]
+name = "mabano-portfolio-api"
+version = "1.0.0"
+description = "FastAPI backend serving the projects shown on the Mabano portfolio."
+requires-python = ">=3.11"
+
+[tool.ruff]
+line-length = 90
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # import sorting
+    "B",   # bugbear (mutable defaults, silent excepts, ...)
+    "UP",  # pyupgrade
+    "SIM", # simplifications
+    "RUF",
+]
+# B008 fires on FastAPI's Depends()-in-defaults idiom, which is correct here.
+ignore = ["B008"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
