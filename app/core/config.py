@@ -33,6 +33,15 @@ class Settings(BaseSettings):
     # Comma-separated list, e.g. "http://localhost:3000,https://mabano.dev".
     cors_origins: str = "http://localhost:3000,http://localhost:5173"
 
+    # --- Contact form email (Resend) ---
+    # Leave RESEND_API_KEY empty to disable the contact endpoint entirely; it
+    # then returns 503 rather than silently dropping enquiries.
+    resend_api_key: SecretStr | None = None
+    # Where enquiries are delivered. Defaults to the admin account.
+    contact_to_email: str = ""
+    # Must be a verified sender. Resend's shared test domain works out of the box.
+    contact_from_email: str = "Portfolio <onboarding@resend.dev>"
+
     @field_validator("supabase_url")
     @classmethod
     def _validate_supabase_url(cls, value: str) -> str:
@@ -54,6 +63,18 @@ class Settings(BaseSettings):
         """CORS origins as a list, ignoring blanks and stray whitespace."""
         origins = (origin.strip() for origin in self.cors_origins.split(","))
         return [origin for origin in origins if origin]
+
+    @property
+    def contact_enabled(self) -> bool:
+        """Whether the contact endpoint can actually deliver mail."""
+        return self.resend_api_key is not None and bool(
+            self.resend_api_key.get_secret_value().strip()
+        )
+
+    @property
+    def contact_recipient(self) -> str:
+        """Who receives enquiries — falls back to the admin account."""
+        return self.contact_to_email.strip() or self.admin_email
 
     @property
     def supabase_key_role(self) -> str:
