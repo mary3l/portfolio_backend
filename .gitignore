@@ -11,3 +11,4 @@ __pycache__/
 # Tooling caches
 .ruff_cache/
 .pytest_cache/
+.env.example
