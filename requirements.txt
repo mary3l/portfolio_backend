@@ -1,5 +1,8 @@
 fastapi==0.139.0
 uvicorn==0.51.0
 supabase==2.31.0
+# Used directly by services/contact.py. Pinned rather than relied on as a
+# transitive dependency of supabase, which could drop or bump it.
+httpx==0.28.1
 pydantic-settings==2.14.2
 email-validator==2.3.0
