@@ -60,8 +60,10 @@ class Settings(BaseSettings):
 
     @property
     def allowed_origins(self) -> list[str]:
-        """CORS origins as a list, ignoring blanks and stray whitespace."""
-        origins = (origin.strip() for origin in self.cors_origins.split(","))
+        """CORS origins as a list, ignoring blanks, stray whitespace and trailing
+        slashes. Browsers send `Origin` without a trailing slash and the match is
+        exact, so "https://site.app/" would otherwise reject every request."""
+        origins = (origin.strip().rstrip("/") for origin in self.cors_origins.split(","))
         return [origin for origin in origins if origin]
 
     @property
